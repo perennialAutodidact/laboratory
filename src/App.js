@@ -6,8 +6,8 @@ import DotsAndLines from './components/experiments/dotsAndLines/DotsAndLines';
 function App() {
   return (
     <div className="App">
-      <Navbar/>
-      <DotsAndLines/>
+      <Navbar/>  
+       {/* <DotsAndLines/> */}
     </div>
   );
 }

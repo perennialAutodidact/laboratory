@@ -28,7 +28,6 @@ class Dot {
       this.ctx.lineTo(neighbor.x, neighbor.y); // used to create a pointer based on x and y
       this.ctx.stroke();
       this.ctx.globalAlpha = 1;
-      return
     });
   }
 
