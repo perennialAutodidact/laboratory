@@ -9,9 +9,9 @@ const SunClock = ({dispatch, ...props}) => {
       let response = await axios.get('https://api.sunrise-sunset.org/json?lat=45.523064&lng=-122.676483')
 
       let {sunrise, sunset} = response.data.results;
-      console.log(sunrise, sunset);
+      console.log(sunrise,sunset);
+      dispatch(setSunriseSunsetTimes({sunrise,sunset}))
     } catch (error) {
-      console.log(error);
     }
   }
 
@@ -47,7 +47,7 @@ const SunClock = ({dispatch, ...props}) => {
 };
 
 const mapStateToProps = (state) => {
-  return {}
+  return {sunrise: state.sunrise, sunset: state.sunset}
 }
 
 export default connect(mapStateToProps)(SunClock);

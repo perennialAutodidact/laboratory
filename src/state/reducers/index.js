@@ -1,5 +1,5 @@
 import {SET_SUNRISE_SUNSET_TIMES} from '../constants/actionTypes';
-import {initialState} from '../'
+import {initialState} from '../state';
 
 const rootReducer = (state=initialState, action) => {
   switch(action.type){
@@ -7,11 +7,13 @@ const rootReducer = (state=initialState, action) => {
       return state
     
     case SET_SUNRISE_SUNSET_TIMES:
+      let {sunrise, sunset} = action.payload
+      console.log('reducer:', sunrise, sunset);
       return {
         ...state,
-        sunrise: action.payload.sunrise,
-        sunset: action.payload.sunset
-      }
+        sunrise: sunrise,
+        sunset: sunset
+      } 
   }
 }
 
