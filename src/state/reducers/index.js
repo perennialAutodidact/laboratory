@@ -8,7 +8,7 @@ const rootReducer = (state=initialState, action) => {
     
     case SET_SUNRISE_SUNSET_TIMES:
       let {sunrise, sunset} = action.payload
-      console.log('reducer:', sunrise, sunset);
+      console.log('reducer:', sunrise, sunset); 
       return {
         ...state,
         sunrise: sunrise,
