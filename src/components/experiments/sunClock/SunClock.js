@@ -1,7 +1,6 @@
 import React, { useRef, useEffect } from "react";
 import axios from "axios";
 import { connect } from "react-redux";
-import { setSunriseSunsetTimes } from "../../../state/actions/index";
 import { GOOGLE_TIME_API_KEY } from "../../../secrets";
 
 const SunClock = ({ sunrise, sunset, dispatch, ...props }) => {
