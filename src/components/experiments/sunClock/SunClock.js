@@ -1,36 +1,25 @@
 import React, { useRef, useEffect } from "react";
+import { useDispatch, useSelector, connect } from "react-redux";
 import axios from "axios";
-import { connect } from "react-redux";
-import { GOOGLE_TIME_API_KEY } from "../../../secrets";
+import { Pie } from "react-chartjs-2";
+import { OPEN_CAGE_DATA_API_KEY } from "../../../secrets";
+import "../../../Sass/components/experiments/_sunClock.scss";
+import Form from "./Form";
 
-const SunClock = ({ sunrise, sunset, dispatch, ...props }) => {
-  const fetchSunriseSunsetTimes = async (lat, lng) => {
-    let params1 = new URLSearchParams([
-      ["lat", lat],
-      ["lng", lng],
-    ]);
-    let params2 = new URLSearchParams([
-      ["lat", lat],
-      ["lng", lng],
-      ["key", GOOGLE_TIME_API_KEY],
-    ]);
-    try {
-      // let response = await axios.get(`https://api.sunrise-sunset.org/json`, {
-      //   params1,
-      // });
-      let offset = await axios.get(
-        `https://maps.googleapis.com/maps/api/timezone/json`,
-        { params:params2 }
+const SunClock = ({ props }) => {
+  const dispatch = useDispatch();
+  const { lat, lng} = useSelector((state) => state.sunClock);
+
+  const fetchCoords = async (query) => {
+      return await axios.get(
+        `https://api.opencagedata.com/geocode/v1/json?q=${query}&key=${OPEN_CAGE_DATA_API_KEY}`
       );
+  };
 
-      console.log(offset);
-
-      // let { sunrise, sunset } = response.data.results;
-      // sunrise = to24hr(sunrise);
-      // sunset = to24hr(sunset);
-      // console.log(response.data.results);
-      // dispatch(setSunriseSunsetTimes({ sunrise, sunset }));
-    } catch (error) {}
+  const fetchSunriseSunsetTimes = async (lat, lng, query) => {
+    return await axios.get(
+        `https://api.sunrise-sunset.org/json?lat=${lat}&lng=${lng}`
+      );
   };
 
   const to24hr = (time = null) => {
@@ -41,34 +30,57 @@ const SunClock = ({ sunrise, sunset, dispatch, ...props }) => {
     console.log(hr, min, sec, ampm);
   };
 
-  const canvasRef = useRef(null);
 
   useEffect(() => {
-    const canvas = canvasRef.current;
-    const context = canvas.getContext("2d");
-    let animationFrameId;
+    fetchCoords("moscow illinois united states").then(res => {
 
-    fetchSunriseSunsetTimes(45.523064, -122.676483);
+      console.log('coords', res.data.results);
+    });
 
-    canvas.width = window.innerWidth * 0.75;
-    canvas.height = window.innerHeight * 0.75;
 
-    const render = () => {
-      context.fillStyle = "#3a3a3a";
-      context.fillRect(0, 0, canvas.width, canvas.height);
-
-      animationFrameId = window.requestAnimationFrame(render);
-    };
-    render();
-
-    return () => window.cancelAnimationFrame(animationFrameId);
+    fetchSunriseSunsetTimes(
+      -2.632153,
+      40.198174,
+      "moscow illinois united states"
+    ).then(res=>{
+      console.log(res);
+    });
   }, []);
 
-  return <canvas ref={canvasRef} {...props} />;
+  return (
+    <div id="sun-clock">
+      {/* <Form /> */}
+      <div id="chart">
+        <Pie
+          data={{
+            datasets: [
+              {
+                data: [50, 50],
+                backgroundColor: ["#000099", "#50C0C0"],
+                borderWidth: 0,
+              },
+            ],
+          }}
+          options={{
+            legend: {
+              display: false,
+            },
+            responsive: true,
+            maintainAspectRatio: false,
+          }}
+        />
+      </div>
+    </div>
+  );
 };
 
 const mapStateToProps = (state) => {
-  return { sunrise: state.sunrise, sunset: state.sunset };
+  return {
+    lat: state.lat,
+    lng: state.lng,
+    sunrise: state.sunrise,
+    sunset: state.sunset,
+  };
 };
 
 export default connect(mapStateToProps)(SunClock);

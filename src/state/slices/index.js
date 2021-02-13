@@ -1,8 +1,10 @@
 import {combineReducers} from '@reduxjs/toolkit';
-import crushCloneReducer from './crushCloneSlice';
+import crushClone from './crushCloneSlice';
+import sunClock from './sunClockSlice';
 
-export const rootReducer = combineReducers({
-  crushCloneReducer
+const rootReducer = combineReducers({
+  crushClone,
+  sunClock
 })
 
 export default rootReducer;
