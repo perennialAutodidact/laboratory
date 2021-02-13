@@ -1,3 +1,37 @@
+#sun-clock {
+
+  background: #666666;
+  display: flex;
+  height: 100vh;
+    justify-content: center;
+    padding: 8em 0;
+  overflow: hidden;
+  width: 100%;
+
+  #form {
+    input {
+      padding: 10px;
+      margin: 5px;
+    }
+  }
+
+  #chart {
+    border-radius: 50%;
+    background: #2e2e2e;
+    transform: rotate(45deg);
+    width: 250px;
+    height: 250px;
+  }
+}
+
+@media screen and (min-width: 768px) {
+  #sun-clock {
+    #chart {
+      width: 700px;
+      height: 700px;
+    }
+  }
+}
 // #sunClock {
 //     background-color: #ababab;
 //     border-radius: 5px;
@@ -24,9 +58,9 @@
 //             margin-left: 50%;
 //             height: 100%;
 //             border-radius: 0 100% 100% 0 / 50%;
-//             // background-color of before element 
-//             // should match the left side for 
-//             background-color: #5b3c9d; 
+//             // background-color of before element
+//             // should match the left side for
+//             background-color: #5b3c9d;
 //             transform-origin: left;
 //             transform: rotate(45deg);
 //         }
