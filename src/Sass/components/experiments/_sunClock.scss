@@ -1,23 +1,165 @@
+@import "../../fonts";
+
 #sun-clock {
+  $color1: #350146;
+  $color2: #9403c4;
+  $color3: #1445d9;
+  $color4: #1b8c6f;
+  $color5: #09d9a3;
 
   background: #666666;
   display: flex;
   height: 100vh;
-    justify-content: center;
-    padding: 8em 0;
+  justify-content: center;
+  padding: 6em 0;
   overflow: hidden;
+  position: relative;
   width: 100%;
 
+  #overlay {
+  }
+
   #form {
+    background-color: $color1;
+    box-shadow: 0 0 5px darken($color1, 60%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: absolute;
+    width: 100vw;
+    z-index: 1;
+
+    #header {
+      align-items: center;
+      display: flex;
+
+      padding: 0.75em 0.75em 2em;
+      width: 100%;
+
+      #close-x {
+        justify-self: end;
+        color: lighten($color2, 35%);
+
+        font-size: 1.5em;
+        transition: all 0.2s ease-in-out;
+
+        &:hover {
+          color: $color3;
+          cursor: pointer;
+        }
+      }
+
+      #title {
+        align-self: flex-end;
+        color: lighten($color2, 35%);
+        font-family: $dosis;
+        font-size: 2.5em;
+        justify-self: end;
+        letter-spacing: 8px;
+        line-height: 0.75em;
+        margin-left: auto;
+        padding: 0;
+        text-transform: uppercase;
+      }
+    }
+
+
+
+    #divider {
+      align-items: center;
+      display: flex;
+      justify-content: center;
+      padding: 0.5em;
+
+      #circle {
+        align-items: center;
+        border-radius: 50%;
+        background-color: darken($color1, 3%);
+        color: lighten($color2, 35%);
+        display: flex;
+        font-family: $dosis;
+        font-size: 1.2em;
+        font-weight: 600;
+        height: 40px;
+        justify-content: center;
+        width: 40px;
+      }
+    }
+
+    #lat-lng {
+        margin: 0 .4em;
+    }
+
+    .form-row {
+      display: flex;
+      background-color: lighten($color1, 5%);
+      margin-bottom: 0.75em;
+      padding: 0.5em;
+      width: 100%;
+      &:last-child {
+        margin-bottom: 0;
+      }
+
+      .label {
+        align-items: flex-end;
+        border-bottom: 1px solid lighten($color1, 25%);
+        border-bottom-left-radius: 10px;
+        color: lighten($color2, 40%);
+        display: flex;
+        font-family: $open-sans;
+        font-size: 1.2em;
+        justify-content: center;
+        text-align: center;
+        text-transform: uppercase;
+        padding: 0.25em;
+        width: 50%;
+      }
+
+      input {
+        background-color: lighten($color3, 25%);
+        border: none;
+        border-radius: 5px;
+        color: darken($color3, 25%);
+
+        font-family: $dosis;
+        font-size: 1.2em;
+        font-weight: 600;
+        letter-spacing: 2px;
+        margin: 0;
+        transition: box-shadow 0.2s ease-in-out;
+        width: 100%;
+
+        &:focus {
+          box-shadow: 0 0 10px $color4;
+        }
+      }
+    }
+
     input {
-      padding: 10px;
+      padding: 5px;
       margin: 5px;
+    }
+
+    #submit {
+        background-color: lighten($color3, 25%);
+        border: 4px solid $color1;
+        border-radius: 10px;
+        margin: 1em auto;
+        padding: 15px;
+        text-transform: uppercase;
+        transition: all .2s ease-in-out;
+        width: 30%;
+
+        &:hover {
+            background-color: $color3;
+        }
     }
   }
 
   #chart {
     border-radius: 50%;
     background: #2e2e2e;
+    box-shadow: 0 0 10px #2e2e2e;
     transform: rotate(45deg);
     width: 250px;
     height: 250px;
@@ -32,37 +174,3 @@
     }
   }
 }
-// #sunClock {
-//     background-color: #ababab;
-//     border-radius: 5px;
-//     box-shadow: 0 0 5px #353535;
-//     height: 75vh;
-//     width: 75vw;
-//     max-height: 75vw;
-//     max-width: 75vh;
-//     display: flex;
-//     align-items: center;
-//     justify-content: center;
-
-//     #face {
-//         background: #5b3c9d;
-//         background-image: linear-gradient(to right, transparent 50%, #1f0f41 0);
-//         border-radius: 50%;
-//         box-shadow: 0 0 5px #1f0f41;
-//         height: 80%;
-//         width: 80%;
-
-//         &::before {
-//             content: '';
-//             display: block;
-//             margin-left: 50%;
-//             height: 100%;
-//             border-radius: 0 100% 100% 0 / 50%;
-//             // background-color of before element
-//             // should match the left side for
-//             background-color: #5b3c9d;
-//             transform-origin: left;
-//             transform: rotate(45deg);
-//         }
-//     }
-// }

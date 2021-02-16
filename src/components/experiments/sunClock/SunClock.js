@@ -8,18 +8,18 @@ import Form from "./Form";
 
 const SunClock = ({ props }) => {
   const dispatch = useDispatch();
-  const { lat, lng} = useSelector((state) => state.sunClock);
+  const { lat, lng, showForm } = useSelector((state) => state.sunClock);
 
   const fetchCoords = async (query) => {
-      return await axios.get(
-        `https://api.opencagedata.com/geocode/v1/json?q=${query}&key=${OPEN_CAGE_DATA_API_KEY}`
-      );
+    return await axios.get(
+      `https://api.opencagedata.com/geocode/v1/json?q=${query}&key=${OPEN_CAGE_DATA_API_KEY}`
+    );
   };
 
   const fetchSunriseSunsetTimes = async (lat, lng, query) => {
     return await axios.get(
-        `https://api.sunrise-sunset.org/json?lat=${lat}&lng=${lng}`
-      );
+      `https://api.sunrise-sunset.org/json?lat=${lat}&lng=${lng}`
+    );
   };
 
   const to24hr = (time = null) => {
@@ -30,26 +30,28 @@ const SunClock = ({ props }) => {
     console.log(hr, min, sec, ampm);
   };
 
-
   useEffect(() => {
-    fetchCoords("moscow illinois united states").then(res => {
-
-      console.log('coords', res.data.results);
-    });
-
+    fetchCoords("Anguilla")
+      .then((res) => {
+        console.log("coords", res.data.results);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
 
     fetchSunriseSunsetTimes(
       -2.632153,
       40.198174,
       "moscow illinois united states"
-    ).then(res=>{
+    ).then((res) => {
       console.log(res);
     });
   }, []);
 
   return (
     <div id="sun-clock">
-      {/* <Form /> */}
+      {/* {showForm ? <Form /> : ""} */}
+      <Form/> 
       <div id="chart">
         <Pie
           data={{

@@ -7,7 +7,8 @@ const initialState = {
   sunsetTime: null,
   city: '',
   state: '',
-  country: ''
+  country: '',
+  showForm: true,
 }
 
 const sunClockSlice = createSlice({
@@ -32,11 +33,15 @@ const sunClockSlice = createSlice({
         state: action.payload.state,
         country: action.payload.country
       }
+    },
+    toggleForm(state, action){
+      return {
+        showForm: !state.showForm
+      }
     }
-    
   },
 });
 
-export const {setSunTimes, setCoords, setLocation} = sunClockSlice.actions
+export const {setSunTimes, setCoords, setLocation, toggleForm} = sunClockSlice.actions
 
 export default sunClockSlice.reducer
