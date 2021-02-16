@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
   lat: null,
@@ -9,39 +9,44 @@ const initialState = {
   state: '',
   country: '',
   showForm: true,
-}
+};
 
 const sunClockSlice = createSlice({
-  name: "sunClock",
+  name: 'sunClock',
   initialState: initialState,
   reducers: {
-    setSunTimes(state, action){
+    setSunTimes(state, action) {
       return {
         sunriseTime: action.payload.sunrise,
         sunsetTime: action.payload.sunset,
-      }
+      };
     },
-    setCoords(state, action){
+    setCoords(state, action) {
       return {
         lat: action.payload.lat,
-        lng: action.payload.lng
-      }
+        lng: action.payload.lng,
+      };
     },
-    setLocation(state, action){
+    setLocation(state, action) {
       return {
         city: action.payload.city,
         state: action.payload.state,
-        country: action.payload.country
-      }
+        country: action.payload.country,
+      };
     },
-    toggleForm(state, action){
+    toggleForm(state, action) {
       return {
-        showForm: !state.showForm
-      }
-    }
+        showForm: !state.showForm,
+      };
+    },
   },
 });
 
-export const {setSunTimes, setCoords, setLocation, toggleForm} = sunClockSlice.actions
+export const {
+  setSunTimes,
+  setCoords,
+  setLocation,
+  toggleForm,
+} = sunClockSlice.actions;
 
-export default sunClockSlice.reducer
+export default sunClockSlice.reducer;

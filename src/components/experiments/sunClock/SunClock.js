@@ -1,16 +1,19 @@
-import React, { useRef, useEffect } from "react";
-import { useDispatch, useSelector, connect } from "react-redux";
-import axios from "axios";
-import { Pie } from "react-chartjs-2";
-import { OPEN_CAGE_DATA_API_KEY } from "../../../secrets";
-import "../../../Sass/components/experiments/_sunClock.scss";
-import Form from "./Form";
+import React, { useRef, useEffect, useState } from 'react';
+import { useDispatch, useSelector, connect } from 'react-redux';
+import axios from 'axios';
+import { Pie } from 'react-chartjs-2';
+import { OPEN_CAGE_DATA_API_KEY } from '../../../secrets';
+import '../../../Sass/components/experiments/_sunClock.scss';
+import Form from './Form';
+import { Transition } from 'react-transition-group';
+import { TimelineLite, TweenMax } from 'gsap';
 
 const SunClock = ({ props }) => {
   const dispatch = useDispatch();
-  const { lat, lng, showForm } = useSelector((state) => state.sunClock);
+  const { lat, lng, showForm } = useSelector(state => state.sunClock);
+  const formRef = useRef(null);
 
-  const fetchCoords = async (query) => {
+  const fetchCoords = async query => {
     return await axios.get(
       `https://api.opencagedata.com/geocode/v1/json?q=${query}&key=${OPEN_CAGE_DATA_API_KEY}`
     );
@@ -23,42 +26,58 @@ const SunClock = ({ props }) => {
   };
 
   const to24hr = (time = null) => {
-    time = time.split(" ");
+    time = time.split(' ');
     let ampm = time[1];
-    let [hr, min, sec] = time[0].split(":").map((item) => parseInt(item));
-    hr = ampm === "AM" ? hr - 8 : hr + 12 - 8;
+    let [hr, min, sec] = time[0].split(':').map(item => parseInt(item));
+    hr = ampm === 'AM' ? hr - 8 : hr + 12 - 8;
     console.log(hr, min, sec, ampm);
   };
 
   useEffect(() => {
-    fetchCoords("Anguilla")
-      .then((res) => {
-        console.log("coords", res.data.results);
+    fetchCoords('Anguilla')
+      .then(res => {
+        console.log('coords', res.data.results);
       })
-      .catch((err) => {
+      .catch(err => {
         console.error(err);
       });
 
     fetchSunriseSunsetTimes(
       -2.632153,
       40.198174,
-      "moscow illinois united states"
-    ).then((res) => {
+      'moscow illinois united states'
+    ).then(res => {
       console.log(res);
     });
   }, []);
 
   return (
-    <div id="sun-clock">
-      {/* {showForm ? <Form /> : ""} */}
-      <Form/> 
-      <div id="chart">
+    <div id='sun-clock'>
+      <Transition
+        // timeout={1000}
+        mountOnEnter
+        unmountOnExit
+        in={showForm}
+        addEndListener={(node, done) => {
+          const tl = new TimelineLite();
+          let tween = TweenMax.to(node, {
+            y: showForm ? 0 : -200,
+            autoAlpha: showForm ? 1 : 0,
+            onComplete: done,
+          });
+
+          tl.add(tween);
+        }}
+      >
+        <Form />
+      </Transition>
+      <div id='chart'>
         <Pie
           data={{
             datasets: [
               {
                 data: [50, 50],
-                backgroundColor: ["#000099", "#50C0C0"],
+                backgroundColor: ['#000099', '#50C0C0'],
                 borderWidth: 0,
               },
             ],
@@ -76,7 +95,7 @@ const SunClock = ({ props }) => {
   );
 };
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
   return {
     lat: state.lat,
     lng: state.lng,
