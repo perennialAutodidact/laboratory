@@ -1,17 +1,20 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useRef, useEffect } from 'react';
 import { useDispatch, useSelector, connect } from 'react-redux';
 import axios from 'axios';
 import { Pie } from 'react-chartjs-2';
 import { OPEN_CAGE_DATA_API_KEY } from '../../../secrets';
 import '../../../Sass/components/experiments/_sunClock.scss';
 import Form from './Form';
-import { Transition } from 'react-transition-group';
-import { TimelineLite, TweenMax } from 'gsap';
+import { IoSettingsSharp } from 'react-icons/io5';
+import { toggleForm } from '../../../state/slices/sunClockSlice'; // pull in actions from slice
 
 const SunClock = ({ props }) => {
   const dispatch = useDispatch();
-  const { lat, lng, showForm } = useSelector(state => state.sunClock);
-  const formRef = useRef(null);
+
+  console.log('rendered');
+
+  // pull state from sunClock redux slice
+  let { showForm } = useSelector(state => state.sunClock);
 
   const fetchCoords = async query => {
     return await axios.get(
@@ -34,7 +37,7 @@ const SunClock = ({ props }) => {
   };
 
   useEffect(() => {
-    fetchCoords('Lagos  ')
+    fetchCoords('portland')
       .then(res => {
         console.log('coords', res.data.results);
       })
@@ -42,19 +45,21 @@ const SunClock = ({ props }) => {
         console.error(err);
       });
 
-  //   fetchSunriseSunsetTimes(
-  //     -2.632153,
-  //     40.198174,
-  //     'moscow illinois united states'
-  //   ).then(res => {
-  //     console.log(res);
-  //   });
+    //   fetchSunriseSunsetTimes(
+    //     -2.632153,
+    //     40.198174,
+    //     'moscow illinois united states'
+    //   ).then(res => {
+    //     console.log(res);
+    //   });
   }, []);
 
   return (
     <div id='sun-clock'>
-
-        <Form />
+      <div id='settings-icon' onClick={() => dispatch(toggleForm())}>
+        <IoSettingsSharp />
+      </div>
+      <Form />
       <div id='chart'>
         <Pie
           data={{
