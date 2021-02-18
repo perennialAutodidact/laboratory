@@ -1,4 +1,4 @@
-@import '../../fonts';
+@import "../../fonts";
 
 #sun-clock {
   $color1: #350146;
@@ -38,21 +38,20 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    padding: 0 .4em 1em .4em;
     position: absolute;
-    width: 100vw;
+    width: 90vw;
     z-index: 1;
 
     #header {
       align-items: center;
       display: flex;
-
-      padding: 0.75em 0.75em 2em;
+      padding: 0.75em 0 2em .4em;
       width: 100%;
 
       #close-x {
         justify-self: end;
         color: lighten($color2, 35%);
-
         font-size: 1.5em;
         transition: all 0.2s ease-in-out;
 
@@ -97,10 +96,6 @@
       }
     }
 
-    #lat-lng {
-      margin: 0 0.4em;
-    }
-
     .form-row {
       display: flex;
       background-color: lighten($color1, 5%);
@@ -123,7 +118,7 @@
         text-align: center;
         text-transform: uppercase;
         padding: 0.25em;
-        width: 50%;
+        width: 40%;
       }
 
       input {
@@ -131,14 +126,13 @@
         border: none;
         border-radius: 5px;
         color: darken($color3, 25%);
-
         font-family: $dosis;
         font-size: 1.2em;
         font-weight: 600;
         letter-spacing: 2px;
         margin: 0;
         transition: box-shadow 0.2s ease-in-out;
-        width: 100%;
+        width: 60%;
 
         &:focus {
           box-shadow: 0 0 10px $color4;
@@ -159,7 +153,7 @@
       padding: 15px;
       text-transform: uppercase;
       transition: all 0.2s ease-in-out;
-      width: 30%;
+      width: 40%;
 
       &:hover {
         background-color: $color3;
