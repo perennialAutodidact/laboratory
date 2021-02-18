@@ -34,7 +34,7 @@ const SunClock = ({ props }) => {
   };
 
   useEffect(() => {
-    fetchCoords('Anguilla')
+    fetchCoords('Lagos  ')
       .then(res => {
         console.log('coords', res.data.results);
       })
@@ -42,35 +42,19 @@ const SunClock = ({ props }) => {
         console.error(err);
       });
 
-    fetchSunriseSunsetTimes(
-      -2.632153,
-      40.198174,
-      'moscow illinois united states'
-    ).then(res => {
-      console.log(res);
-    });
+  //   fetchSunriseSunsetTimes(
+  //     -2.632153,
+  //     40.198174,
+  //     'moscow illinois united states'
+  //   ).then(res => {
+  //     console.log(res);
+  //   });
   }, []);
 
   return (
     <div id='sun-clock'>
-      <Transition
-        // timeout={1000}
-        mountOnEnter
-        unmountOnExit
-        in={showForm}
-        addEndListener={(node, done) => {
-          const tl = new TimelineLite();
-          let tween = TweenMax.to(node, {
-            y: showForm ? 0 : -200,
-            autoAlpha: showForm ? 1 : 0,
-            onComplete: done,
-          });
 
-          tl.add(tween);
-        }}
-      >
         <Form />
-      </Transition>
       <div id='chart'>
         <Pie
           data={{
