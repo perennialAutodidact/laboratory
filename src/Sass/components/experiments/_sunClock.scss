@@ -120,8 +120,10 @@
         padding: 0.25em;
         width: 40%;
       }
-
-      input {
+      .country-option {
+          font-family: $dosis;
+      }
+      input, select {
         background-color: lighten($color3, 25%);
         border: none;
         border-radius: 5px;

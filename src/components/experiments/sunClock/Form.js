@@ -3,6 +3,7 @@ import { CgCloseR } from "react-icons/cg";
 import { TimelineLite, TweenMax, Elastic } from "gsap"; // gsap animation library
 import { useDispatch, useSelector } from "react-redux";
 import { toggleForm } from "../../../state/slices/sunClockSlice"; // pull in actions from slice
+import {countryList} from '../../constants/countryList'
 
 const Form = () => {
   const dispatch = useDispatch();
@@ -76,12 +77,16 @@ const Form = () => {
           <p className="label">
             <span className="text">Country</span>
           </p>
-          <input
-            type="text"
-            name="country"
-            value={country}
-            onChange={onChange}
-          />
+          <select name="country"
+          size='5'
+          onChange={onChange}
+          value={country}
+          >
+            {countryList.map(item=>(
+              <option className='country-option' value={item.name}>{item.name}</option>
+            ))}
+          </select>
+
         </div>
       </div>
 
