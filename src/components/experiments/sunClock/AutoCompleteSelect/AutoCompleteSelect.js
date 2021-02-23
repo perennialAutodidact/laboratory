@@ -1,56 +1,48 @@
-import React, { useState, useEffect, useRef } from "react";
-import "./style.scss";
-import { Trie } from "./autoComplete";
+import React, { useState, useEffect, useRef } from 'react';
+import './style.scss';
+import { Trie } from './autoComplete';
 
 const Option = ({ label }) => {
   return (
-    <div className="option">
+    <div className='option'>
       <span>{label}</span>
     </div>
   );
 };
 
-const AutoCompleteSelect = ({ allOptions, fieldName, value }) => {
+const AutoCompleteSelect = ({ allOptions, fieldName }) => {
   const [state, setState] = useState({
-    query: "",
+    query: '',
     results: [],
     trie: new Trie(),
   });
   const { query, results, trie } = state;
 
-
-  const updateResults = (e) => {
-    setState({
-      ...state,
-      results: results,
-    });
-  };
-
-  const onChange = (e) => {
-    
-    setState({...state, query:e.target.value})
+  // when the form input updates
+  const onChange = e => {
+    setState({ ...state, query: e.target.value });
     console.log('query', query);
-    // let results = trie.find(query);
-    // updateResults(results);
   };
 
   // Add all lowercase state names to Trie
   useEffect(() => {
     if (trie) {
-      allOptions.forEach((option) => {
+      allOptions.forEach(option => {
         trie.addWords(option.label.toLowerCase());
       });
     }
   }, []);
 
+  // when the query changes, find all words in the Trie that begin with the query string
   useEffect(() => {
-    let newResults = trie.find(query)
-  }, [query])
+    let newResults = trie.find(query);
+    console.log(newResults);
+  }, [query]);
 
   return (
     <input
-      type="text"
-      id="auto-complete-select"
+      type='text'
+      id='auto-complete-select'
       name={fieldName}
       value={query}
       onChange={onChange}
