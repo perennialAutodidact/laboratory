@@ -13,20 +13,23 @@ const Form = () => {
 
   const [formData, setFormData] = useState({
     city: "",
-    state: "",
-    country: "",
     lat: "",
     lng: "",
   });
-  const { city, state, country, lat, lng } = formData;
+  const { city, lat, lng } = formData;
+  const [stateName, setStateName] = useState("");
+  const [country, setCountry] = useState("");
 
-  // for GSAP enter/exit animation 
+  // for GSAP enter/exit animation
   let ref = useRef(null);
 
   // form control functions
   // -------------------------------------
   const onSubmit = (e) => {
     e.preventDefault();
+
+    // get the value of the inputs
+
     // call APIs with form data
   };
 
@@ -46,11 +49,11 @@ const Form = () => {
     // tween the form in or out based on the value of the showForm boolean
     let tween = TweenMax.to(ref, {
       y: showForm ? 0 : -500,
-      autoAlpha: showForm ? 1 : 0,
       scale: showForm ? 1 : 0,
-      duration: 1.5,
-      ease: "elastic.out(1, 0.3)",
+      duration: 1,
+      ease: "elastic.out(.75, 0.5)" 
     });
+    
 
     // add the tween to the timeline
     tl.add(tween);
@@ -76,7 +79,12 @@ const Form = () => {
           <p className="label">
             <span className="text">State</span>
           </p>
-          <input type="text" name="state" value={state} onChange={onChange} />
+          <input
+            type="text"
+            name="state"
+            value={stateName}
+            onChange={onChange}
+          />
         </div>
         <div className="form-row">
           <p className="label">
@@ -85,8 +93,8 @@ const Form = () => {
           <AutoCompleteSelect
             fieldName={"country"}
             value={country}
-            allOptions={stateList}
-            setFormData={setFormData}
+            allOptions={countryList}
+            formDataSetter={setCountry}
           />
         </div>
       </div>
