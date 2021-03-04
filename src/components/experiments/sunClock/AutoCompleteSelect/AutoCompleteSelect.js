@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import { Trie } from "./autoComplete";
 import titleize from "../../../../utilities/titleize";
 import useKeyPress from "../../../../utilities/useKeyPress";
@@ -11,7 +11,13 @@ const Option = ({ label, id, selected }) => {
   );
 };
 
-// formDataSetter - the function to update parent state
+/**
+ * @param {function} formDataSetter -
+ * @param {Object[]} allOptions - list of options for autocomplete
+ * @param {string} fieldName - name attribute of the select field
+ *
+ */
+// formDataSetter - the function to update the select's value in the parent form
 // allOptions - list of options for autocomplete
 // fieldName - name of the input field
 const AutoCompleteSelect = ({ formDataSetter, allOptions, fieldName }) => {
@@ -19,7 +25,11 @@ const AutoCompleteSelect = ({ formDataSetter, allOptions, fieldName }) => {
     query: "",
     results: [],
     trie: new Trie(),
+    firstOption: 0,
+    lastOption: 5,
     selectedOption: 0,
+    selectedValue: null,
+    keyPressed: null,
   });
   const { query, results, trie, selectedOption } = state;
 
@@ -29,41 +39,32 @@ const AutoCompleteSelect = ({ formDataSetter, allOptions, fieldName }) => {
   const enterKeyPress = useKeyPress("Enter");
 
   let optionRef = useRef(null);
+  let maxOptions = 5;
 
-  const updateResults = (results) => {
-    setState({
+  // apply state changes to results array
+  const updateResults = useCallback((results) => {
+    setState((state) => ({
       ...state,
       results: results,
-    });
-  };
+    }));
+  }, []);
 
-  // when the form input updates
+  // change 'query' in state when input value changes
   const onChange = (e) => {
-    setState({ ...state, query: e.target.value });
+    setState({ ...state, query: e.target.value, selectedOption: 0 });
   };
 
-  const onKeyPress = (key) => {
-    switch (key) {
-      case "up":
-        if (selectedOption > 0) {
-          setState({
-            ...state,
-            selectedOption: selectedOption - 1,
-          });
-        }
-      case "down":
-        if (selectedOption < 5) {
-          setState({
-            ...state,
-            selectedOption: selectedOption + 1,
-          });
-        }
-      case "enter":
-        setState({
-          ...state,
-        });
+  // update the parent form and results array for this component
+  const updateFormData = useCallback(() => {
+    let newResults;
+    if (query === "") {
+      newResults = [];
+    } else {
+      newResults = trie.find(query.toLowerCase());
     }
-  };
+    formDataSetter(query);
+    updateResults(newResults);
+  }, [query, formDataSetter, updateResults, trie]);
 
   // Add all lowercase state names to Trie
   useEffect(() => {
@@ -72,40 +73,68 @@ const AutoCompleteSelect = ({ formDataSetter, allOptions, fieldName }) => {
         trie.addWords(option.label.toLowerCase());
       });
     }
-  }, []);
+  }, [allOptions, trie]);
 
   // when the query changes, find all words in the Trie that begin with the query string
   useEffect(() => {
     if (query === "") {
       // reset results if query is blank
-      updateResults([]);
+      updateFormData();
     } else if (query !== "") {
-      let newResults = trie.find(query.toLowerCase());
-      updateResults(newResults);
-      formDataSetter(newResults);
+      updateFormData();
     }
-  }, [query]);
+  }, [query, updateFormData]);
 
   // change the selected auto complete option using arrow keys
   useEffect(() => {
+    const updateOptions = ({ selectedOption }) => {
+      console.log(selectedOption);
+
+      setState({
+        ...state,
+        selectedOption: selectedOption,
+      });
+    };
+
+    console.log(state.selectedOption);
+
     if (upKeyPress) {
-      onKeyPress("up");
+      if (state.selectedOption > 0) {
+        updateOptions(state.selectedOption - 1);
+        // setState(s => ({
+        //   ...s,
+        //   selectedOption: selectedOption - 1,
+        // }));
+      }
     } else if (downKeyPress) {
-      onKeyPress("down");
+      console.log(state.selectedOption);
+
+      if (
+        state.selectedOption < maxOptions &&
+        state.selectedOption < results.length - 1
+      ) {
+        updateOptions(state.selectedOption + 1);
+
+        // setState(s=>({
+        //   ...s,
+        //   selectedOption: selectedOption + 1,
+        // }));
+      }
     } else if (enterKeyPress) {
-      onKeyPress("enter");
+      console.log("enter pressed");
+      // onKeyPress("enter");
     }
-  }, [upKeyPress, downKeyPress, enterKeyPress]);
+  }, [upKeyPress, downKeyPress, enterKeyPress, maxOptions, results, state]);
 
   return (
     <div id="auto-complete-select">
       <input type="text" name={fieldName} value={query} onChange={onChange} />
 
-      {results.length > 0 ? (
-        <div className="auto-complete-options" ref={el => optionRef=el}>
+      {results && results.length > 0 ? (
+        <div className="auto-complete-options" ref={(el) => (optionRef = el)}>
           {/* display the first 6 options */}
           {results.map((label, i) =>
-            i < 6 ? (
+            i <= 100 ? (
               <Option
                 label={label}
                 id={i}
