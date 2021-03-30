@@ -33,6 +33,14 @@
       &.selected {
         background-color: lighten($color3, 15%);
       }
+
+      &.first-option {
+          background-color: green;
+      }
+
+      &.last-option {
+        background-color: red;
+    }
     }
   }
 }

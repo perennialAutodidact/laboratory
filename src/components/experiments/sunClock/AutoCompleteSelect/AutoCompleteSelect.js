@@ -1,13 +1,25 @@
-import React, { useState, useEffect, useRef, useCallback } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Trie } from "./autoComplete";
 import titleize from "../../../../utilities/titleize";
 import useKeyPress from "../../../../utilities/useKeyPress";
 import { CgKeyhole } from "react-icons/cg";
 
-const Option = ({ label, id, selected }) => {
+const Option = ({ label, id, selected, first, last }) => {
+  let optionRef = useRef(null);
+
   return (
-    <div className={"auto-complete-option " + (selected ? "selected" : "")}>
-      <span id={id}>{titleize(label)}</span>
+    <div
+      className={
+        "auto-complete-option " +
+        (selected ? "selected " : "") +
+        (first ? "first-option" : "") +
+        (last ? "last-option" : "")
+      }
+      ref={(el) => (optionRef = el)}
+    >
+      <span id={id}>
+        {titleize(label)} {first}
+      </span>
     </div>
   );
 };
@@ -27,7 +39,6 @@ const AutoCompleteSelect = (props) => {
     firstOption: 0,
     lastOption: 5,
     selectedValue: null,
-    keyPressed: null,
   });
 
   const [query, setQuery] = useState("");
@@ -39,9 +50,6 @@ const AutoCompleteSelect = (props) => {
   const upKeyPress = useKeyPress("ArrowUp");
   const downKeyPress = useKeyPress("ArrowDown");
   const enterKeyPress = useKeyPress("Enter");
-
-  //let optionRef = useRef(null);
-  let optionsShown = props.optionsShown;
 
   // change 'query' in state when input value changes
   const onChange = (e) => {
@@ -93,7 +101,7 @@ const AutoCompleteSelect = (props) => {
     }
   }, [
     selectedOption,
-    optionsShown,
+    props.optionsShown,
     results,
     upKeyPress,
     downKeyPress,
@@ -113,12 +121,14 @@ const AutoCompleteSelect = (props) => {
         <div className="auto-complete-options">
           {/* display the first 6 options */}
           {results.map((label, i) =>
-            i < props.optionsShown ? (
+            i < 100 ? (
               <Option
                 label={label}
                 id={i}
                 key={i}
                 selected={selectedOption === i}
+                first={state.firstOption === i}
+                last={state.lastOption === i}
               />
             ) : (
               ""
