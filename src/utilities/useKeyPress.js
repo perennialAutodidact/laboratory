@@ -13,6 +13,10 @@ const useKeyPress = (targetKey) => {
     const downHandler = ({ key }) => {
       if (key === targetKey) {
         setKeyPressed(true);
+
+        // the slightest of delays to keep selected option
+        // from jumping more than one position while keyPress is true
+        setTimeout(1, setKeyPressed(false));
       }
     };
 

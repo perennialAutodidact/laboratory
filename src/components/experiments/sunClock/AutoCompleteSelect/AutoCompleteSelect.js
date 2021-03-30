@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef, useCallback } from "react";
 import { Trie } from "./autoComplete";
 import titleize from "../../../../utilities/titleize";
 import useKeyPress from "../../../../utilities/useKeyPress";
+import { CgKeyhole } from "react-icons/cg";
 
 const Option = ({ label, id, selected }) => {
   return (
@@ -12,129 +13,107 @@ const Option = ({ label, id, selected }) => {
 };
 
 /**
- * @param {function} formDataSetter -
+ * @param {function} formDataSetter - the function to update the select's value in the parent form
  * @param {Object[]} allOptions - list of options for autocomplete
  * @param {string} fieldName - name attribute of the select field
+ * @param {number} optionsShown - number of select options to display
  *
  */
 // formDataSetter - the function to update the select's value in the parent form
 // allOptions - list of options for autocomplete
 // fieldName - name of the input field
-const AutoCompleteSelect = ({ formDataSetter, allOptions, fieldName }) => {
+const AutoCompleteSelect = (props) => {
   const [state, setState] = useState({
-    query: "",
-    results: [],
-    trie: new Trie(),
     firstOption: 0,
     lastOption: 5,
-    selectedOption: 0,
     selectedValue: null,
     keyPressed: null,
   });
-  const { query, results, trie, selectedOption } = state;
+
+  const [query, setQuery] = useState("");
+  const [selectedOption, setSelectedOption] = useState(3);
+  const [trie] = useState(new Trie());
+  const [results, setResults] = useState([]);
 
   // detect if up or down arrow is pressed
   const upKeyPress = useKeyPress("ArrowUp");
   const downKeyPress = useKeyPress("ArrowDown");
   const enterKeyPress = useKeyPress("Enter");
 
-  let optionRef = useRef(null);
-  let maxOptions = 5;
-
-  // apply state changes to results array
-  const updateResults = useCallback((results) => {
-    setState((state) => ({
-      ...state,
-      results: results,
-    }));
-  }, []);
+  //let optionRef = useRef(null);
+  let optionsShown = props.optionsShown;
 
   // change 'query' in state when input value changes
   const onChange = (e) => {
-    setState({ ...state, query: e.target.value, selectedOption: 0 });
+    setQuery(e.target.value);
+    setSelectedOption(0);
   };
 
-  // update the parent form and results array for this component
-  const updateFormData = useCallback(() => {
+  // Add all lowercase state names to Trie
+  useEffect(() => {
+    if (trie) {
+      // add individual words to trie rather than all at once
+      // in order to add each as a lowercase word, rather than the whole object
+      props.allOptions.forEach((option) => {
+        trie.addWords(option.label.toLowerCase());
+      });
+    }
+  }, [props.allOptions, trie]);
+
+  // when the query changes, find all words in the Trie that begin with the query string
+  useEffect(() => {
     let newResults;
     if (query === "") {
       newResults = [];
     } else {
       newResults = trie.find(query.toLowerCase());
     }
-    formDataSetter(query);
-    updateResults(newResults);
-  }, [query, formDataSetter, updateResults, trie]);
-
-  // Add all lowercase state names to Trie
-  useEffect(() => {
-    if (trie) {
-      allOptions.forEach((option) => {
-        trie.addWords(option.label.toLowerCase());
-      });
-    }
-  }, [allOptions, trie]);
-
-  // when the query changes, find all words in the Trie that begin with the query string
-  useEffect(() => {
-    if (query === "") {
-      // reset results if query is blank
-      updateFormData();
-    } else if (query !== "") {
-      updateFormData();
-    }
-  }, [query, updateFormData]);
+    props.formDataSetter(query);
+    setResults(newResults);
+  }, [query, props.formDataSetter, trie]);
 
   // change the selected auto complete option using arrow keys
   useEffect(() => {
-    const updateOptions = ({ selectedOption }) => {
-      console.log(selectedOption);
-
-      setState({
-        ...state,
-        selectedOption: selectedOption,
-      });
-    };
-
-    console.log(state.selectedOption);
-
     if (upKeyPress) {
-      if (state.selectedOption > 0) {
-        updateOptions(state.selectedOption - 1);
-        // setState(s => ({
-        //   ...s,
-        //   selectedOption: selectedOption - 1,
-        // }));
+      if (selectedOption > 0) {
+        console.log("up selectedOption", selectedOption);
+
+        setSelectedOption(selectedOption - 1);
       }
     } else if (downKeyPress) {
-      console.log(state.selectedOption);
-
+      console.log("down selectedOption", selectedOption);
       if (
-        state.selectedOption < maxOptions &&
-        state.selectedOption < results.length - 1
+        selectedOption < props.optionsShown - 1 &&
+        selectedOption < results.length - 1
       ) {
-        updateOptions(state.selectedOption + 1);
-
-        // setState(s=>({
-        //   ...s,
-        //   selectedOption: selectedOption + 1,
-        // }));
+        setSelectedOption(selectedOption + 1);
       }
     } else if (enterKeyPress) {
       console.log("enter pressed");
-      // onKeyPress("enter");
     }
-  }, [upKeyPress, downKeyPress, enterKeyPress, maxOptions, results, state]);
+  }, [
+    selectedOption,
+    optionsShown,
+    results,
+    upKeyPress,
+    downKeyPress,
+    enterKeyPress,
+  ]);
 
   return (
     <div id="auto-complete-select">
-      <input type="text" name={fieldName} value={query} onChange={onChange} />
+      <input
+        type="text"
+        name={props.fieldName}
+        value={query}
+        onChange={onChange}
+      />
 
       {results && results.length > 0 ? (
-        <div className="auto-complete-options" ref={(el) => (optionRef = el)}>
+        <div className="auto-complete-options">
           {/* display the first 6 options */}
           {results.map((label, i) =>
-            i <= 100 ? (
+            i < props.optionsShown ? (
               <Option
                 label={label}
                 id={i}

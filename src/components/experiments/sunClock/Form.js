@@ -16,9 +16,9 @@ const Form = () => {
     lat: "",
     lng: "",
   });
-  const { city, lat, lng } = formData;
-  const [stateName, setStateName] = useState("");
-  const [country, setCountry] = useState("");
+  const { city, lat, lng, stateName, country } = formData;
+  // const [stateName, setStateName] = useState("");
+  // const [country, setCountry] = useState("");
 
   // for GSAP enter/exit animation
   let ref = useRef(null);
@@ -29,6 +29,7 @@ const Form = () => {
     e.preventDefault();
 
     // get the value of the inputs
+    console.log(city, stateName, lat, lng, stateName, country);
 
     // call APIs with form data
   };
@@ -94,7 +95,8 @@ const Form = () => {
             fieldName={"country"}
             value={country}
             allOptions={countryList}
-            formDataSetter={setCountry}
+            formDataSetter={setFormData}
+            optionsShown={6}
           />
         </div>
       </div>
