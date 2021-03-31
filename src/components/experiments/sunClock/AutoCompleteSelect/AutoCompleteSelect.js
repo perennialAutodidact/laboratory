@@ -34,7 +34,7 @@ const Option = ({ label, id, selected, first, last }) => {
 // formDataSetter - the function to update the select's value in the parent form
 // allOptions - list of options for autocomplete
 // fieldName - name of the input field
-const AutoCompleteSelect = (props) => {
+const AutoCompleteSelect = ({allOptions, fieldName, formDataSetter, optionsShown}) => {
   const [state, setState] = useState({
     firstOption: 0,
     lastOption: 5,
@@ -59,7 +59,7 @@ const AutoCompleteSelect = (props) => {
 
   // update which select options are shown based on the currently selected option
   const updateOptions = () => {
-    
+
   }
 
   // Add all lowercase state names to Trie
@@ -81,9 +81,9 @@ const AutoCompleteSelect = (props) => {
     } else {
       newResults = trie.find(query.toLowerCase());
     }
-    props.formDataSetter(query);
+    formDataSetter(query);
     setResults(newResults);
-  }, [query, props.formDataSetter, trie]);
+  }, [query, formDataSetter, trie]);
 
   // change the selected auto complete option using arrow keys
   useEffect(() => {
@@ -97,6 +97,8 @@ const AutoCompleteSelect = (props) => {
         selectedOption < results.length - 1
       ) {
         setSelectedOption(selectedOption + 1);
+      } else if(selectedOption === state.firstOption + props.optionsShown){
+        alert('lala')
       }
     } else if (enterKeyPress) {
       console.log("enter pressed");
