@@ -4,7 +4,6 @@ import { TimelineLite, TweenMax, Elastic } from "gsap"; // gsap animation librar
 import { useDispatch, useSelector } from "react-redux";
 import { toggleForm } from "../../../state/slices/sunClockSlice"; // pull in actions from slice
 import { countryList } from "../../constants/countryList";
-import { stateList } from "../../constants/stateList";
 import AutoCompleteSelect from "./AutoCompleteSelect/AutoCompleteSelect";
 
 const Form = () => {
@@ -16,9 +15,9 @@ const Form = () => {
     lat: "",
     lng: "",
   });
-  const { city, lat, lng, stateName, country } = formData;
-  // const [stateName, setStateName] = useState("");
-  // const [country, setCountry] = useState("");
+  const { city, lat, lng} = formData;
+  const [stateName, setStateName] = useState("");
+  const [country, setCountry] = useState("");
 
   // for GSAP enter/exit animation
   let ref = useRef(null);

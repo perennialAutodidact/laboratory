@@ -3,7 +3,7 @@ import { useDispatch, useSelector, connect } from 'react-redux';
 import axios from 'axios';
 import { Pie } from 'react-chartjs-2';
 import { OPEN_CAGE_DATA_API_KEY } from '../../../secrets';
-import '../../../Sass/components/experiments/_sunClock.scss';
+import '../../../sass/components/experiments/_sunClock.scss';
 import Form from './Form';
 import { IoSettingsSharp } from 'react-icons/io5';
 import { toggleForm } from '../../../state/slices/sunClockSlice'; // pull in actions from slice

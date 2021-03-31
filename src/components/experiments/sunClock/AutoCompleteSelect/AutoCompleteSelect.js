@@ -11,14 +11,14 @@ const Option = ({ label, id, selected, first, last }) => {
     <div
       className={
         "auto-complete-option " +
-        (selected ? "selected " : "") +
-        (first ? "first-option" : "") +
-        (last ? "last-option" : "")
+        (selected ?    "selected " : "") +
+        (   first ? "first-option" : "") +
+        (    last ?  "last-option" : "")
       }
       ref={(el) => (optionRef = el)}
     >
       <span id={id}>
-        {titleize(label)} {first}
+        {titleize(label)}
       </span>
     </div>
   );
@@ -57,6 +57,11 @@ const AutoCompleteSelect = (props) => {
     setSelectedOption(0);
   };
 
+  // update which select options are shown based on the currently selected option
+  const updateOptions = () => {
+    
+  }
+
   // Add all lowercase state names to Trie
   useEffect(() => {
     if (trie) {
@@ -84,12 +89,9 @@ const AutoCompleteSelect = (props) => {
   useEffect(() => {
     if (upKeyPress) {
       if (selectedOption > 0) {
-        console.log("up selectedOption", selectedOption);
-
         setSelectedOption(selectedOption - 1);
       }
     } else if (downKeyPress) {
-      console.log("down selectedOption", selectedOption);
       if (
         selectedOption < props.optionsShown - 1 &&
         selectedOption < results.length - 1
