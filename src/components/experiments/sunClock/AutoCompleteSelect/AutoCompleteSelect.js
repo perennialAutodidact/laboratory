@@ -55,12 +55,18 @@ const AutoCompleteSelect = ({
   const enterKeyPress = useKeyPress("Enter");
 
   // set up listener to detent click outside of this element
-  const {allOptionsRef, isVisible, setIsVisible} = useVisible(false);
+  let allOptionsRef = useRef(null);
+  let {isVisible, setIsVisible} = useVisible(true, allOptionsRef);
+
+  useEffect(()=>{
+    console.log('allOptionsRef', allOptionsRef);
+  }, [allOptionsRef])
 
   // change 'query' in state when input value changes
   const onChange = (e) => {
     setQuery(e.target.value);
     setSelectedOption(0);
+    setIsVisible(true);
   };
 
   // update which select options are shown based on the currently selected option
@@ -118,7 +124,7 @@ const AutoCompleteSelect = ({
       <input type="text" name={fieldName} value={query} onChange={onChange} />
 
       {isVisible && results && results.length > 0 ? (
-        <div className="auto-complete-options">
+        <div className="auto-complete-options" ref={allOptionsRef}>
           {/* display the first 6 options */}
           {results.map((text, i) =>
             i < 100 ? (
