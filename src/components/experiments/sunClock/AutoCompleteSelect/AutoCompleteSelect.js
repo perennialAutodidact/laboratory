@@ -30,7 +30,7 @@ const Option = ({ text, id, selected, first, last }) => {
  * @param {Object[]} allOptions - list of options for autocomplete
  * @param {string} fieldName - name attribute of the select field
  * @param {number} optionsShown - number of select options to display
- * 
+ *
  */
 // formDataSetter - the function to update the select's value in the parent form
 // allOptions - list of options for autocomplete
@@ -48,6 +48,7 @@ const AutoCompleteSelect = ({
   const [selectedValue, setSelectedValue] = useState(null);
   const [trie] = useState(new Trie());
   const [results, setResults] = useState([]);
+  const [visibleOptions, setVisibleOptions] = useState([]);
 
   // detect if up or down arrow is pressed
   const upKeyPress = useKeyPress("ArrowUp");
@@ -56,11 +57,11 @@ const AutoCompleteSelect = ({
 
   // set up listener to detent click outside of this element
   let allOptionsRef = useRef(null);
-  let {isVisible, setIsVisible} = useVisible(true, allOptionsRef);
+  let { isVisible, setIsVisible } = useVisible(true, allOptionsRef);
 
-  useEffect(()=>{
-    console.log('allOptionsRef', allOptionsRef);
-  }, [allOptionsRef])
+  useEffect(() => {
+    console.log("allOptionsRef", allOptionsRef);
+  }, [allOptionsRef]);
 
   // change 'query' in state when input value changes
   const onChange = (e) => {
@@ -69,17 +70,30 @@ const AutoCompleteSelect = ({
     setIsVisible(true);
   };
 
-  // update which select options are shown based on the currently selected option
-  const updateOptions = () => {
-    console.log(rangeStart, selectedOption, rangeEnd);
-  };
+  //
+  useEffect(() => {
+    // update which select options are shown based on the currently selected option
+    const updateOptions = () => {
+      console.log(rangeStart, selectedOption, rangeEnd);
+
+      if (selectedOption === rangeEnd - 1 && rangeEnd + 1 < results.length) {
+        setRangeStart(rangeStart + 1);
+        setRangeEnd(rangeEnd + 1);
+      } else if (selectedOption === rangeStart + 1 && rangeStart - 1 >= 0) {
+        setRangeStart(rangeStart - 1);
+        setRangeEnd(rangeEnd - 1);
+      }
+    };
+    updateOptions();
+    setVisibleOptions(results.slice(rangeStart, rangeEnd+1));
+  }, [rangeStart, rangeEnd, selectedOption, results]);
 
   // Add all lowercase state names to Trie
   useEffect(() => {
     if (trie) {
       // add individual words to trie rather than all at once
       // in order to add each as a lowercase word, rather than the whole object
-        trie.addWords(allOptions);
+      trie.addWords(allOptions);
     }
   }, [allOptions, trie]);
 
@@ -95,6 +109,10 @@ const AutoCompleteSelect = ({
     }
     formDataSetter(query); // update form state
     setResults(newResults); // update auto complete results
+
+    // reset visible options range
+    setRangeStart(0);
+    setRangeEnd(5);
   }, [query, formDataSetter, trie]);
 
   // change the selected auto complete option using arrow keys
@@ -105,8 +123,8 @@ const AutoCompleteSelect = ({
       }
     } else if (downKeyPress) {
       if (selectedOption < results.length - 1) {
-        setSelectedOption(selectedOption + 1);
-      }
+        setSelectedOption(selectedOption + 1);  
+      } 
     } else if (enterKeyPress) {
       console.log("enter pressed");
     }
@@ -126,20 +144,17 @@ const AutoCompleteSelect = ({
       {isVisible && results && results.length > 0 ? (
         <div className="auto-complete-options" ref={allOptionsRef}>
           {/* display the first 6 options */}
-          {results.map((text, i) =>
-            i < 100 ? (
-              <Option
-                text={text}
-                id={i}
-                key={i}
-                selected={selectedOption === i}
-                first={rangeStart === i}
-                last={rangeEnd === i}
-              />
-            ) : (
-              ""
-            )
-          )}
+          
+          {visibleOptions.map((text, i) => (
+            <Option
+              text={text}
+              id={i}
+              key={i}
+              selected={selectedOption-rangeStart === i}
+              // first={rangeStart === i}
+              // last={rangeEnd === i}
+            />
+          ))}
         </div>
       ) : (
         ""
