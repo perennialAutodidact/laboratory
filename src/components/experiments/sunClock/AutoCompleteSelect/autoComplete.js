@@ -128,12 +128,12 @@ export class Trie {
   }
 }
 
-let wordList = ['cat', 'catch', 'act', 'ale']
+// let wordList = ['cat', 'catch', 'act', 'ale']
 
-let t = new Trie();
+// let t = new Trie();
 
-t.addWords(wordList);
+// t.addWords(wordList);
 
 
-let words = t.allWords();
-console.log(words);
+// let words = t.allWords();
+// console.log(words);

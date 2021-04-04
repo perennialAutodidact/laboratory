@@ -57,12 +57,9 @@ const AutoCompleteSelect = ({
 
   // set up listener to detent click outside of this element
   let allOptionsRef = useRef(null);
-  let { isVisible, setIsVisible } = useVisible(true, allOptionsRef);
+  let {isVisible, setIsVisible } = useVisible(true, allOptionsRef);
 
-  useEffect(() => {
-    console.log("allOptionsRef", allOptionsRef);
-  }, [allOptionsRef]);
-
+ 
   // change 'query' in state when input value changes
   const onChange = (e) => {
     setQuery(e.target.value);
@@ -70,11 +67,17 @@ const AutoCompleteSelect = ({
     setIsVisible(true);
   };
 
+  const resetSelectMenuState = () => {
+    setRangeStart(0);
+    setRangeEnd(5);
+    setSelectedOption(0);
+  }
+
   //
   useEffect(() => {
     // update which select options are shown based on the currently selected option
     const updateOptions = () => {
-      console.log(rangeStart, selectedOption, rangeEnd);
+      // console.log(rangeStart, selectedOption, rangeEnd);
 
       if (selectedOption === rangeEnd - 1 && rangeEnd + 1 < results.length) {
         setRangeStart(rangeStart + 1);
@@ -84,8 +87,10 @@ const AutoCompleteSelect = ({
         setRangeEnd(rangeEnd - 1);
       }
     };
+
     updateOptions();
     setVisibleOptions(results.slice(rangeStart, rangeEnd+1));
+
   }, [rangeStart, rangeEnd, selectedOption, results]);
 
   // Add all lowercase state names to Trie
@@ -110,23 +115,24 @@ const AutoCompleteSelect = ({
     formDataSetter(query); // update form state
     setResults(newResults); // update auto complete results
 
-    // reset visible options range
-    setRangeStart(0);
-    setRangeEnd(5);
+    resetSelectMenuState();
   }, [query, formDataSetter, trie]);
 
   // change the selected auto complete option using arrow keys
   useEffect(() => {
+    
     if (upKeyPress) {
       if (selectedOption > 0) {
         setSelectedOption(selectedOption - 1);
       }
     } else if (downKeyPress) {
       if (selectedOption < results.length - 1) {
-        setSelectedOption(selectedOption + 1);  
+        setSelectedOption(selectedOption + 1);
       } 
     } else if (enterKeyPress) {
-      console.log("enter pressed");
+        // set the query to the innerText of the selected options
+        setQuery(allOptionsRef.current.children[selectedOption-rangeStart].innerText);
+        setIsVisible(false);
     }
   }, [
     selectedOption,
@@ -139,11 +145,10 @@ const AutoCompleteSelect = ({
 
   return (
     <div id="auto-complete-select">
-      <input type="text" name={fieldName} value={query} onChange={onChange} />
-
-      {isVisible && results && results.length > 0 ? (
-        <div className="auto-complete-options" ref={allOptionsRef}>
-          {/* display the first 6 options */}
+      <input type="text" name={fieldName} value={query} onChange={onChange} onClick={onChange}/>
+      {isVisible && results && results.length > 0 && query.toLowerCase() !== results[0] ? (
+        <div className="auto-complete-options" ref={el=>allOptionsRef.current=el}>
+          {/* display the first 6 options */} 
           
           {visibleOptions.map((text, i) => (
             <Option
@@ -151,8 +156,6 @@ const AutoCompleteSelect = ({
               id={i}
               key={i}
               selected={selectedOption-rangeStart === i}
-              // first={rangeStart === i}
-              // last={rangeEnd === i}
             />
           ))}
         </div>

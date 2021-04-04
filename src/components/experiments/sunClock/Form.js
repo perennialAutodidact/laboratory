@@ -15,7 +15,7 @@ const Form = () => {
     lat: "",
     lng: "",
   });
-  const { city, lat, lng} = formData;
+  const { city, lat, lng } = formData;
   const [stateName, setStateName] = useState("");
   const [country, setCountry] = useState("");
 
@@ -51,16 +51,27 @@ const Form = () => {
       y: showForm ? 0 : -500,
       scale: showForm ? 1 : 0,
       duration: 1,
-      ease: "elastic.out(.75, 0.5)" 
+      ease: "elastic.out(.75, 0.5)",
     });
-    
 
     // add the tween to the timeline
     tl.add(tween);
   }, [showForm]);
 
   return (
-    <form id="form" onSubmit={onSubmit} ref={(el) => (ref = el)}>
+    <form
+      id="form"
+      onSubmit={onSubmit}
+      ref={(el) => (ref = el)}
+      onKeyDown={(e) => {
+        // override default action when Enter is pressed
+        // to avoid erroneous form submissions when using Enter
+        // to choose an option in the select menus
+        if(e.key == 'Enter') {
+          e.preventDefault();
+        }
+      }}
+    >
       <div id="header">
         <span id="close-x">
           {/* toggle hide/show form */}

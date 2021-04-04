@@ -6,6 +6,7 @@ const useIsVisible = (initialIsVisible, ref) => {
 
   useEffect(()=> {
     const handleClickOutside = (event) => {
+      // if the ref element isn't the clicked object, hide the options
       if(ref.current && !ref.current.contains(event.target)){
         setIsVisible(false);
       }
