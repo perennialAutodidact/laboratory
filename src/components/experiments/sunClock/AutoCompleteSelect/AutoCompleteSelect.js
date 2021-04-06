@@ -57,9 +57,8 @@ const AutoCompleteSelect = ({
 
   // set up listener to detent click outside of this element
   let allOptionsRef = useRef(null);
-  let {isVisible, setIsVisible } = useVisible(true, allOptionsRef);
+  let { isVisible, setIsVisible } = useVisible(true, allOptionsRef);
 
- 
   // change 'query' in state when input value changes
   const onChange = (e) => {
     setQuery(e.target.value);
@@ -71,7 +70,7 @@ const AutoCompleteSelect = ({
     setRangeStart(0);
     setRangeEnd(5);
     setSelectedOption(0);
-  }
+  };
 
   //
   useEffect(() => {
@@ -89,8 +88,7 @@ const AutoCompleteSelect = ({
     };
 
     updateOptions();
-    setVisibleOptions(results.slice(rangeStart, rangeEnd+1));
-
+    setVisibleOptions(results.slice(rangeStart, rangeEnd + 1));
   }, [rangeStart, rangeEnd, selectedOption, results]);
 
   // Add all lowercase state names to Trie
@@ -120,7 +118,6 @@ const AutoCompleteSelect = ({
 
   // change the selected auto complete option using arrow keys
   useEffect(() => {
-    
     if (upKeyPress) {
       if (selectedOption > 0) {
         setSelectedOption(selectedOption - 1);
@@ -128,11 +125,13 @@ const AutoCompleteSelect = ({
     } else if (downKeyPress) {
       if (selectedOption < results.length - 1) {
         setSelectedOption(selectedOption + 1);
-      } 
+      }
     } else if (enterKeyPress) {
-        // set the query to the innerText of the selected options
-        setQuery(allOptionsRef.current.children[selectedOption-rangeStart].innerText);
-        setIsVisible(false);
+      // set the query to the innerText of the selected options
+      setQuery(
+        allOptionsRef.current.children[selectedOption - rangeStart].innerText
+      );
+      setIsVisible(false);
     }
   }, [
     selectedOption,
@@ -145,17 +144,29 @@ const AutoCompleteSelect = ({
 
   return (
     <div id="auto-complete-select">
-      <input type="text" name={fieldName} value={query} onChange={onChange} onClick={onChange}/>
-      {isVisible && results && results.length > 0 && query.toLowerCase() !== results[0] ? (
-        <div className="auto-complete-options" ref={el=>allOptionsRef.current=el}>
-          {/* display the first 6 options */} 
-          
+      <input
+        type="text"
+        name={fieldName}
+        value={query}
+        onChange={onChange}
+        onClick={onChange}
+      />
+      {isVisible &&
+      results &&
+      results.length > 0 &&
+      query.toLowerCase() !== results[0] ? (
+        <div
+          className="auto-complete-options"
+          ref={(el) => (allOptionsRef.current = el)}
+        >
+          {/* display the first 6 options */}
+
           {visibleOptions.map((text, i) => (
             <Option
               text={text}
               id={i}
               key={i}
-              selected={selectedOption-rangeStart === i}
+              selected={selectedOption - rangeStart === i}
             />
           ))}
         </div>
