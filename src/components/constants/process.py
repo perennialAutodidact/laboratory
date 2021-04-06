@@ -23,12 +23,9 @@ for city in cities:
         'lat': city['lat'],
         'lng': city['lng']
     }
-    if new_city not in countries[city['country']]['cities'][city['name'][0].upper()]:
-        countries[city['country']]['cities'][city['name'][0].upper()].append({
-            'name': city['name'],
-            'lat': city['lat'],
-            'lng': city['lng']
-        })
+    city_list = countries[city['country']]['cities'][city['name'][0].upper()]
+    if new_city not in city_list:
+        city_list.append(new_city)
 
 
 # for country in countries:
@@ -37,6 +34,6 @@ for city in cities:
 #             countries[country]['cities'][key] = list(set(countries[country]['cities'][key]))
 
 with open('countries.json', 'w') as file:
-    json.dump(countries, file, indent=4)
+    json.dump(countries, file, indent=2)
 
 # # print(countries)
