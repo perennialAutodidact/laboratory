@@ -17,9 +17,26 @@ with open('newCountryList.json', 'r', encoding='utf-8') as file:
     cities = json.loads(file.read())
 
 
-for city in cities[len(cities)//2:]:
-    print(city['name'])
-    countries[city['country']]['cities'][city['name'][0].upper()].append(city['name'])
+for city in cities:
+    new_city = {
+        'name': city['name'],
+        'lat': city['lat'],
+        'lng': city['lng']
+    }
+    if new_city not in countries[city['country']]['cities'][city['name'][0].upper()]:
+        countries[city['country']]['cities'][city['name'][0].upper()].append({
+            'name': city['name'],
+            'lat': city['lat'],
+            'lng': city['lng']
+        })
 
 
-print(countries)
+# for country in countries:
+#     for key in countries[country]['cities']:
+#         if countries[country]['cities'][key]:
+#             countries[country]['cities'][key] = list(set(countries[country]['cities'][key]))
+
+with open('countries.json', 'w') as file:
+    json.dump(countries, file, indent=4)
+
+# # print(countries)
