@@ -67,7 +67,7 @@ const Form = () => {
         // override default action when Enter is pressed
         // to avoid erroneous form submissions when using Enter
         // to choose an option in the select menus
-        if (e.key == 'Enter') {
+        if (e.key === "Enter") {
           e.preventDefault();
         }
       }}
@@ -93,36 +93,40 @@ const Form = () => {
           />
         </div>
 
-        {country === 'United States' ? (
-
-          <div className="form-row">
-            <p className="label">
-              <span className="text">State</span>
-            </p>
-            <AutoCompleteSelect
+        <div className="form-row">
+          {country !== "United States" ? (
+            <div className="disabled-form-row">
+              {/* alpha'd box over row when disabled */}
+            </div>
+          ) : (
+            ""
+          )}
+          <p className="label">
+            <span className="text">State</span>
+          </p>
+          <AutoCompleteSelect
             fieldName={"state"}
             value={stateName}
-            // allOptions={stateList}
+            allOptions={[]}
             formDataSetter={setStateName}
             optionsShown={6}
+            isDisabled={country !== "United States"}
           />
-            <input
-              type="text"
-              name="state"
-              value={stateName}
-              onChange={onChange}
-            />
-          </div>
-        ) : ('')}
-
+        </div>
 
         <div className="form-row">
+        {!country ? (
+            <div className="disabled-form-row">
+              {/* alpha'd box over row when disabled */}
+            </div>
+          ) : (
+            ""
+          )}
           <p className="label">
             <span className="text">City</span>
           </p>
-          <input type="text" name="city" value={city} onChange={onChange} />
+          <input type="text" name="city" value={city} onChange={onChange} disabled={!country}/>
         </div>
-
       </div>
       <div id="divider">
         <span id="circle">

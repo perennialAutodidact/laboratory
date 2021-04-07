@@ -40,6 +40,7 @@ const AutoCompleteSelect = ({
   fieldName,
   formDataSetter,
   optionsShown,
+  isDisabled=false
 }) => {
   const [rangeStart, setRangeStart] = useState(0);
   const [rangeEnd, setRangeEnd] = useState(5);
@@ -54,6 +55,7 @@ const AutoCompleteSelect = ({
   const upKeyPress = useKeyPress("ArrowUp");
   const downKeyPress = useKeyPress("ArrowDown");
   const enterKeyPress = useKeyPress("Enter");
+  const tabKeyPress = useKeyPress("Tab");
 
   // set up listener to detent click outside of this element
   let allOptionsRef = useRef(null);
@@ -126,7 +128,7 @@ const AutoCompleteSelect = ({
       if (selectedOption < results.length - 1) {
         setSelectedOption(selectedOption + 1);
       }
-    } else if (enterKeyPress) {
+    } else if (enterKeyPress || tabKeyPress) {
       if(allOptionsRef.current){
 
         // set the query to the innerText of the selected options
@@ -143,6 +145,7 @@ const AutoCompleteSelect = ({
     upKeyPress,
     downKeyPress,
     enterKeyPress,
+    tabKeyPress
   ]);
 
   return (
@@ -153,6 +156,7 @@ const AutoCompleteSelect = ({
         value={query}
         onChange={onChange}
         onClick={onChange}
+        disabled={isDisabled}
       />
       {isVisible &&
       results &&

@@ -97,12 +97,24 @@ $color5: #09d9a3;
       }
     }
 
+    .disabled-form-row {
+        background-color: darken($color1, 5%);
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 100%;
+        opacity: .7;
+        z-index: 2;
+    }
     .form-row {
       display: flex;
       background-color: lighten($color1, 5%);
       margin-bottom: 0.75em;
       padding: 0.5em;
       width: 100%;
+      position: relative;
+
       &:last-child {
         margin-bottom: 0;
       }
