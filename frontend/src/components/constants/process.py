@@ -33,7 +33,11 @@ for city in cities:
 #         if countries[country]['cities'][key]:
 #             countries[country]['cities'][key] = list(set(countries[country]['cities'][key]))
 
-with open('countries.json', 'w') as file:
-    json.dump(countries, file, indent=2)
+# with open('countries.json', 'w') as file:
+#     json.dump(countries, file, indent=2)
 
-# # print(countries)
+print(len(countries['US']['cities']))
+
+us_cities = countries['US']['cities']
+
+print(sum([len(us_cities[key]) for key in us_cities.keys()]))

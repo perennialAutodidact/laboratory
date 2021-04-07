@@ -67,7 +67,7 @@ const Form = () => {
         // override default action when Enter is pressed
         // to avoid erroneous form submissions when using Enter
         // to choose an option in the select menus
-        if(e.key == 'Enter') {
+        if (e.key == 'Enter') {
           e.preventDefault();
         }
       }}
@@ -82,35 +82,48 @@ const Form = () => {
       <div id="city-state-country">
         <div className="form-row">
           <p className="label">
-            <span className="text">City</span>
-          </p>
-          <input type="text" name="city" value={city} onChange={onChange} />
-        </div>
-        <div className="form-row">
-          <p className="label">
-            <span className="text">State</span>
-          </p>
-          <input
-            type="text"
-            name="state"
-            value={stateName}
-            onChange={onChange}
-          />
-        </div>
-        <div className="form-row">
-          <p className="label">
             <span className="text">Country</span>
           </p>
           <AutoCompleteSelect
             fieldName={"country"}
             value={country}
             allOptions={countryList}
-            formDataSetter={setFormData}
+            formDataSetter={setCountry}
             optionsShown={6}
           />
         </div>
-      </div>
 
+        {country === 'United States' ? (
+
+          <div className="form-row">
+            <p className="label">
+              <span className="text">State</span>
+            </p>
+            <AutoCompleteSelect
+            fieldName={"state"}
+            value={stateName}
+            // allOptions={stateList}
+            formDataSetter={setStateName}
+            optionsShown={6}
+          />
+            <input
+              type="text"
+              name="state"
+              value={stateName}
+              onChange={onChange}
+            />
+          </div>
+        ) : ('')}
+
+
+        <div className="form-row">
+          <p className="label">
+            <span className="text">City</span>
+          </p>
+          <input type="text" name="city" value={city} onChange={onChange} />
+        </div>
+
+      </div>
       <div id="divider">
         <span id="circle">
           <span>OR</span>

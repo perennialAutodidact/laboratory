@@ -36,23 +36,23 @@ const SunClock = ({ props }) => {
     console.log(hr, min, sec, ampm);
   };
 
-  // useEffect(() => {
-  //   fetchCoords('portland')
-  //     .then(res => {
-  //       console.log('coords', res.data.results);
-  //     })
-  //     .catch(err => {
-  //       console.error(err);
-  //     });
+  useEffect(() => {
+    fetchCoords('34.62954,-92.44127')
+      .then(res => {
+        console.log('coords', res.data.results);
+      })
+      .catch(err => {
+        console.error(err);
+      });
 
-  //   //   fetchSunriseSunsetTimes(
-  //   //     -2.632153,
-  //   //     40.198174,
-  //   //     'moscow illinois united states'
-  //   //   ).then(res => {
-  //   //     console.log(res);
-  //   //   });
-  // }, []);
+      fetchSunriseSunsetTimes(
+        -2.632153,
+        40.198174,
+        'moscow illinois united states'
+      ).then(res => {
+        console.log(res);
+      });
+  }, []);
 
   return (
     <div id='sun-clock'>

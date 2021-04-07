@@ -127,11 +127,14 @@ const AutoCompleteSelect = ({
         setSelectedOption(selectedOption + 1);
       }
     } else if (enterKeyPress) {
-      // set the query to the innerText of the selected options
-      setQuery(
-        allOptionsRef.current.children[selectedOption - rangeStart].innerText
-      );
-      setIsVisible(false);
+      if(allOptionsRef.current){
+
+        // set the query to the innerText of the selected options
+        setQuery(
+          allOptionsRef.current.children[selectedOption - rangeStart].innerText
+        );
+        setIsVisible(false);
+      }
     }
   }, [
     selectedOption,
