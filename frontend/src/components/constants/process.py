@@ -2,6 +2,7 @@ import json
 from string import ascii_uppercase as ABCs
 import requests
 from secrets import OPEN_CAGE_DATA_API_KEY
+import time
 
 # with open('countryAbb.json', 'r', encoding='utf-8') as file:
 #     countries = json.loads(file.read())
@@ -38,52 +39,77 @@ from secrets import OPEN_CAGE_DATA_API_KEY
 # with open('countries.json', 'w') as file:
 #     json.dump(countries, file, indent=2)
 
+def write_to_file(contents):
+    with open('us_states.json', 'w') as file:
+        json.dump(contents, file, indent=2)
+            
 with open('countries.json', 'r', encoding='utf-8') as file:
     countries = json.loads(file.read())
 
-with open('stateList.json', 'r', encoding='utf-8') as file:
-    states = json.loads(file.read())
+with open('us_states.json', 'r', encoding='utf-8') as file:
+    us_states = json.loads(file.read())
 
 
-for key in states.keys():
-    states[key].update({'cities':[]})
 
-print(states)
-# print(len(countries['US']['cities']))
 
 us_cities = countries['US']['cities']
 
-# print(sum([len(us_cities[key]) for key in us_cities.keys()]))
+# since the API only allows 2500 requests/day, this is to
+# keep track of next starting position
 
 
+for key in us_cities.keys():
+    for index in range(len(us_cities[key])):
 
-# for key in 'A':#us_cities.keys():
-#     for index in range(1):#range(len(us_cities[key])):
-#         city = us_cities[key][index]
+        time.sleep()
 
-#         print(index, city)
-#         if 'state_code' not in city.keys():
+        lat = us_cities[key][index]['lat']
+        lng = us_cities[key][index]['lng']
+       
 
-#             query = f"{city['lat']},{city['lng']}"
-#         #     print(query)
-#             url = f'https://api.opencagedata.com/geocode/v1/json?q={query}&key={OPEN_CAGE_DATA_API_KEY}'
+        query = f"{lat},{lng}"
+        print(query)
+        url = f'https://api.opencagedata.com/geocode/v1/json?q={query}&key={OPEN_CAGE_DATA_API_KEY}'
 
-#             res = requests.get(url).json()
+        res = requests.get(url).json()
 
-#             remaining_requests = res['rate']['remaining']
-#             state_code = res['results'][0]['components']['state_code']
+        remaining_requests = res['rate']['remaining']
+        state_code = res['results'][0]['components']['state_code']
 
-#             print('requests remaining:', remaining_requests)
-#             print(state_code)
-
-#             city['state_code'] = state_code
-
-#             us_cities[key][index] = city
+        print('requests remaining:', remaining_requests)
+        # print(state_code)
 
 
+        # us_cities[key][index] = city
+        state = us_states[state_code]
 
-# us_cities['A'][0] = city 
+        city = {
+            'name': us_cities[key][index]['name'],
+            'state_code': state_code,
+            'lat': lat,
+            'lng': lng
+        }
 
-# countries['US']['cities'] = us_cities
+        if city not in us_states[state_code]['cities']:
+            us_states[state_code]['cities'].append(city)
+        else:
+            print('DUPLICATE')
+            print(city)
 
-# print(countries['US']['cities']['A'][:3])
+        
+        if remaining_requests < 10:
+            write_to_file(us_states)
+            print(f'last city index: {index}')
+            print(f'last letter key: {key}')
+            exit()
+
+print(f'last city index: {index}')
+print(f'last letter key: {key}')
+write_to_file(us_states)
+# # us_cities['A'][0] = city 
+
+# # countries['US']['cities'] = us_cities
+
+# # print(countries['US']['cities']['A'][:3])
+# print(us_states)
+
