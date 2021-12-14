@@ -16,17 +16,17 @@ const SunClock = ({ props }) => {
   // pull state from sunClock redux slice
   let { showForm } = useSelector(state => state.sunClock);
 
-  // const fetchCoords = async query => {
-  //   return await axios.get(
-  //     `https://api.opencagedata.com/geocode/v1/json?q=${query}&key=${OPEN_CAGE_DATA_API_KEY}`
-  //   );
-  // };
+  const fetchCoords = async query => {
+    return await axios.get(
+      `https://api.opencagedata.com/geocode/v1/json?q=${query}&key=${OPEN_CAGE_DATA_API_KEY}`
+    );
+  };
 
-  // const fetchSunriseSunsetTimes = async (lat, lng, query) => {
-  //   return await axios.get(
-  //     `https://api.sunrise-sunset.org/json?lat=${lat}&lng=${lng}`
-  //   );
-  // };
+  const fetchSunriseSunsetTimes = async (lat, lng, query) => {
+    return await axios.get(
+      `https://api.sunrise-sunset.org/json?lat=${lat}&lng=${lng}`
+    );
+  };
 
   const to24hr = (time = null) => {
     time = time.split(' ');

@@ -4,6 +4,7 @@ import { TimelineLite, TweenMax, Elastic } from "gsap"; // gsap animation librar
 import { useDispatch, useSelector } from "react-redux";
 import { toggleForm } from "../../../state/slices/sunClockSlice"; // pull in actions from slice
 import { countryList } from "../../constants/countryList";
+import { stateList } from "../../constants/USStates"
 import AutoCompleteSelect from "./AutoCompleteSelect/AutoCompleteSelect";
 
 const Form = () => {
@@ -107,7 +108,7 @@ const Form = () => {
           <AutoCompleteSelect
             fieldName={"state"}
             value={stateName}
-            allOptions={[]}
+            allOptions={stateList}
             formDataSetter={setStateName}
             optionsShown={6}
             isDisabled={country !== "United States"}
