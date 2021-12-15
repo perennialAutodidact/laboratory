@@ -1,5 +1,5 @@
-@import "../../fonts";
-@import "../../variables";
+@import '../../fonts';
+@import '../../variables';
 $color1: #350146;
 $color2: #9403c4;
 $color3: #1445d9;
@@ -7,7 +7,6 @@ $color4: #1b8c6f;
 $color5: #09d9a3;
 
 #sun-clock {
-
   background: #666666;
   display: flex;
   height: 100vh;
@@ -39,7 +38,7 @@ $color5: #09d9a3;
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 0 .4em 1em .4em;
+    padding: 0 0.4em 3em 0.4em;
     position: absolute;
     width: 90vw;
     z-index: 1;
@@ -47,20 +46,8 @@ $color5: #09d9a3;
     #header {
       align-items: center;
       display: flex;
-      padding: 0.75em 0 2em .4em;
+      padding: 0.75em 0 2em 0.4em;
       width: 100%;
-
-      #close-x {
-        justify-self: end;
-        color: lighten($color2, 35%);
-        font-size: 1.5em;
-        transition: all 0.2s ease-in-out;
-
-        &:hover {
-          color: $color3;
-          cursor: pointer;
-        }
-      }
 
       #title {
         align-self: flex-end;
@@ -98,14 +85,14 @@ $color5: #09d9a3;
     }
 
     .disabled-form-row {
-        background-color: darken($color1, 5%);
-        position: absolute;
-        top: 0;
-        left: 0;
-        height: 100%;
-        width: 100%;
-        opacity: .7;
-        z-index: 2;
+      background-color: darken($color1, 5%);
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 100%;
+      opacity: 0.7;
+      z-index: 2;
     }
     .form-row {
       display: flex;
@@ -134,7 +121,7 @@ $color5: #09d9a3;
         width: 40%;
       }
       .country-option {
-          font-family: $dosis;
+        font-family: $dosis;
       }
       input {
         background-color: lighten($color3, 25%);
@@ -174,6 +161,54 @@ $color5: #09d9a3;
         background-color: $color3;
       }
     }
+
+    .alert {
+      background-color: $color2;
+      border-radius: 5px;
+      padding: 30px;
+      margin-top: 15px;
+
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      color: white;
+      font-family: $dosis;
+      font-size: 2rem;
+
+      position: absolute;
+      z-index: 2000;
+      opacity: 0;
+      top: -50px;
+
+      h4 {
+        padding: 10px;
+      }
+
+      svg {
+        position: absolute;
+        right: 15px;
+        top: 15px;
+        font-size: 1.5rem;
+      }
+    }
+
+    .close-x {
+      justify-self: end;
+      color: lighten($color2, 35%);
+      font-size: 1.5em;
+      transition: all 0.2s ease-in-out;
+      path {
+        stroke: white;
+        transition: stroke 0.3s ease-in-out;
+      }
+      &:hover {
+        path {
+          cursor: pointer;
+          stroke: $color3;
+        }
+      }
+    }
   }
 
   #chart {
@@ -191,5 +226,9 @@ $color5: #09d9a3;
       width: 700px;
       height: 700px;
     }
+    #form {
+      width: 40vw;
+    }
   }
+
 }

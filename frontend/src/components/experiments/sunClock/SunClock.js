@@ -11,22 +11,20 @@ import { toggleForm } from '../../../state/slices/sunClockSlice'; // pull in act
 const SunClock = ({ props }) => {
   const dispatch = useDispatch();
 
-  console.log('rendered');
-
   // pull state from sunClock redux slice
   let { showForm } = useSelector(state => state.sunClock);
 
-  const fetchCoords = async query => {
-    return await axios.get(
-      `https://api.opencagedata.com/geocode/v1/json?q=${query}&key=${OPEN_CAGE_DATA_API_KEY}`
-    );
-  };
+  // const fetchCoords = async query => {
+  //   return await axios.get(
+  //     `https://api.opencagedata.com/geocode/v1/json?q=${query}&key=${OPEN_CAGE_DATA_API_KEY}`
+  //   );
+  // };
 
-  const fetchSunriseSunsetTimes = async (lat, lng, query) => {
-    return await axios.get(
-      `https://api.sunrise-sunset.org/json?lat=${lat}&lng=${lng}`
-    );
-  };
+  // const fetchSunriseSunsetTimes = async (lat, lng, query) => {
+  //   return await axios.get(
+  //     `https://api.sunrise-sunset.org/json?lat=${lat}&lng=${lng}`
+  //   );
+  // };
 
   const to24hr = (time = null) => {
     time = time.split(' ');
@@ -36,23 +34,23 @@ const SunClock = ({ props }) => {
     console.log(hr, min, sec, ampm);
   };
 
-  useEffect(() => {
-    fetchCoords('34.62954, -92.44127')
-      .then(res => {
-        console.log('coords', res.data.results);
-      })
-      .catch(err => {
-        console.error(err);
-      });
+  // useEffect(() => {
+  //   fetchCoords('34.62954, -92.44127')
+  //     .then(res => {
+  //       console.log('coords', res.data.results);
+  //     })
+  //     .catch(err => {
+  //       console.error(err);
+  //     });
 
-      fetchSunriseSunsetTimes(
-        -2.632153,
-        40.198174,
-        'moscow illinois united states'
-      ).then(res => {
-        console.log(res);
-      });
-  }, []);
+  //     fetchSunriseSunsetTimes(
+  //       -2.632153,
+  //       40.198174,
+  //       'moscow illinois united states'
+  //     ).then(res => {
+  //       console.log(res);
+  //     });
+  // }, []);
 
   return (
     <div id='sun-clock'>
