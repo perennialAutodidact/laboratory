@@ -44,9 +44,8 @@ const Form = () => {
 
     if (!lat && !lng && !country) {
       setAlertText('Please provide a country name or coordinates')
-      // setTimeout(() => {
-      //   setAlert('')
-      // }, 3000)
+    } else if(!countryList.includes(country)){
+      setAlertText('Please select a valid country')
     } else {
       if (lat !== '' && lng !== '') {
         // call sunrise/sunset api
@@ -63,7 +62,10 @@ const Form = () => {
         }
         dispatch(fetchCoords(query))
           .then(res => {
-            console.log(res)
+            let results = res.payload.data.results
+            results = results.filter(result=>result.confidence <= 6)
+            console.log(results)
+
             // call sunrise api
           })
           .catch(err => console.error(err))
@@ -82,8 +84,8 @@ const Form = () => {
   useEffect(() => {
     if (country !== 'United States') {
       setStateName('')
-    } else if(!country){
-      setFormData({...formData, city: ''})
+    } else if (!country) {
+      setFormData({ ...formData, city: '' })
     }
   }, [country, setStateName, setFormData])
 
@@ -91,7 +93,6 @@ const Form = () => {
     setShowCityField(country !== '')
     setShowStateNameField(country === 'United States')
   }, [country])
-
 
   useEffect(() => {
     const tl = new TimelineLite()
@@ -101,13 +102,13 @@ const Form = () => {
       y: showForm ? 0 : -500,
       scale: showForm ? 1 : 0,
       duration: 1,
-      ease: 'elastic.out(.75, 0.5)'
+      ease: 'elastic.out(0.25, 0.25)'
     })
 
     // add the tween to the timeline
     tl.add(tween)
 
-    // return () => tl.kill()
+    return () => tl.kill()
   }, [showForm])
 
   return (
