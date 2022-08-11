@@ -1,0 +1,18 @@
+.containerr {
+    min-height: 100vh;
+}
+
+.section {
+    min-height: 100vh;
+    margin: 0 5rem;
+}
+
+#section-1 {
+    /* background-color: #add8e6; */
+}
+#section-2 {
+    /* background-color: #f4f800; */
+}
+#section-3 {
+    /* background-color: #20b2aa; */
+}

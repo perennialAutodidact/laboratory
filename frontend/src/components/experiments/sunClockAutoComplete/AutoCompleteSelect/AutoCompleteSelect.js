@@ -127,7 +127,7 @@ const AutoCompleteSelect = ({
       newResults = trie.find(query.toLowerCase())
       setIsVisible(true)
     }
-    formDataSetter(query) // update form state
+    formDataSetter(titleize(query)) // update form state
     setResults(newResults) // update auto complete results
 
     resetSelectMenuState()

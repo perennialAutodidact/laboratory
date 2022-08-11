@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="css/normalize.css">
+    <link rel="stylesheet" href="css/skeleton.css">
+
+    <link rel="stylesheet" href="css/index.css">
+
+    <script src="./gsap-public/minified/gsap.min.js"></script>
+    <script src="./gsap-public/minified/ScrollTrigger.min.js"></script>
+
+    <title>GSAP Practice</title>
+</head>
+
+<body>
+    <div class="containerr">
+        <div class="section" id="section-1"></div>
+        <div class="section" id="section-2"></div>
+        <div class="section" id="section-3"></div>
+    </div>
+
+    <script>
+        const container = document.querySelector('.containerr')
+        sections = gsap.utils.toArray('.section')
+        let tl = gsap.timeline({
+            scrollTrigger: {
+                trigger: container,
+                scrub: true,
+                end: ()=> `+=${container.offsetHeight}`,
+                markers: true
+            }
+        })
+        gsap.registerPlugin(ScrollTrigger)
+
+
+
+        tl.to(container, {
+            backgroundColor: "#20b2aa",
+            duration: 2,
+            start: ()=>``
+        })
+        .to(container, {
+            backgroundColor:"#add8e6",
+            duration: 2,
+        })
+        .to(container, {
+            backgroundColor:"#87cefa",
+            duration: 2,
+        })
+
+        
+
+        /*
+        sections.forEach(section =>
+            tl.to('.container', {
+                backgroundColor: '#000',
+                duration: 1,
+                scrollTrigger: {
+                    trigger: "top",
+                    markers: true,
+                    start:  ()=>`+=${section.offsetHeight/4}`,
+                    end: ()=>`+=${section.offsetHeight}`,
+                    scrub: true
+                }
+            })
+        )*/
+    </script>
+
+</body>
+
+</html>
